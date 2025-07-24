@@ -1,1 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile Sidebar Menu</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="navbar.css" />
+</head>
+<body>
 
+  <nav class="navbar">
+    <div class="menu" id="menu-btn">☰</div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." id="searchInput" oninput="search()" />
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="/Blog.html">Blog</a>
+      <a href="/Contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" id="closeSidebar">×</a>
+
+    <div class="profile">
+      <div class="image-container">
+        <img src="Profile.jpg" alt="Profile Image" id="profileImage" />
+        <div class="overlay">+</div>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+      <h3 id="userName">John Smith</h3>
+      <p class="designation">Software Engineer</p>
+    </div>
+
+    <div class="sidebar-links">
+  <a href="/MyProfile.html">
+    <span class="material-icons">person</span> My Profile
+  </a>
+  <a href="/Jobs.html">
+    <span class="material-icons">work</span> My Jobs
+  </a>
+  <a href="/saved.html">
+    <span class="material-icons">bookmark</span> Saved Jobs
+  </a>
+  <a href="/Preferences.html">
+    <span class="material-icons">settings</span> Preferences
+  </a>
+  <a href="/Login.html" class="logout">
+    <span class="material-icons">logout</span> Log Out
+  </a>
+</div>
+
+  </div>
+
+ <!-- Hero Section -->
+<section id="home" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; padding: 50px;">
+
+  <div style="flex: 1; min-width: 300px; padding: 20px;">
+    <h1 style="font-size: 2.8rem; color: #333;">
+      <span style="color: #ff7a00;">Find the Job</span> You've<br> Been Dreaming Of !!
+    </h1>
+
+    <p style="margin-top: 15px; color: #555; font-size: 1.1rem;">
+  Browse top job listings, apply easily, and get hired fast! Start your career journey today with <strong>JobNest</strong>.
+  <br><br>
+  We connect talented individuals with leading companies across various industries. Whether you're a fresher looking for your first job 
+  or a professional seeking new challenges, JobNest is here to help you every step of the way.
+</p>
+
+
+     <div style="margin-top: 25px;">
+      <a href="/Jobs.html" style="padding: 12px 25px; background: #ff7a00; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block;">
+  Search Jobs
+</a>
+
+    </div>
+  </div>
+
+  <div style="flex: 1; min-width: 300px; padding: 20px; text-align: center;">
+    <img src="/assets/images/homepage.jpg" alt="Job Portal Image" style="margin-top: 6%;   max-width: 100%; height: auto; border-radius: 10px;">
+  </div>
+
+</section>
+
+
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay-bg"></div>
+
+  <script src="navbar.js"></script>
+<script>
+  function openApplyModal(company, role) {
+    document.getElementById("modalCompany").textContent = company;
+    document.getElementById("modalRole").textContent = role;
+    document.getElementById("applyModal").style.display = "block";
+  }
+
+  window.onload = function () {
+    const modal = document.getElementById("applyModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const form = document.getElementById("applyForm");
+
+    closeModalBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    form.onsubmit = function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("applicantName").value.trim();
+      const email = document.getElementById("applicantEmail").value.trim();
+      const file = document.getElementById("resume").files[0];
+
+      if (!name || !email || !file) {
+        alert("Please fill in all fields and upload a resume.");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert("Enter a valid email address.");
+        return;
+      }
+
+      if (file.type !== "application/pdf") {
+        alert("Only PDF resumes are allowed.");
+        return;
+      }
+
+      alert("Application submitted successfully!");
+      modal.style.display = "none";
+      form.reset();
+    };
+  };
+</script>
+
+<script>
+  // Load user details from localStorage
+  window.onload = function () {
+    const name = localStorage.getItem('userName');
+    const role = localStorage.getItem('userRole');
+    const profileImage = localStorage.getItem('profileImage');
+
+    if (name) {
+      document.getElementById('userName').innerText = name;
+    }
+    if (role) {
+      document.querySelector('.designation').innerText = role;
+    }
+    if (profileImage) {
+      document.getElementById('profileImage').src = profileImage;
+    }
+  };
+</script>
+
+<!-- Search Result Sidebar -->
+<div id="resultSidebar" class="result-sidebar">
+  <span class="close-result" onclick="closeResults()">×</span>
+  <h2 style="margin-bottom: 15px; font-style: italic; color: navy;">Job Results</h2>
+  <div id="resultList"></div>
+</div>
+<!-- Apply Now Modal -->
+<div id="applyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Apply for <span id="modalRole"></span> at <span id="modalCompany"></span></h2>
+    <form id="applyForm">
+      <label for="applicantName">Your Name:</label>
+      <input type="text" id="applicantName" name="applicantName" required />
+
+      <label for="applicantEmail">Your Email:</label>
+      <input type="email" id="applicantEmail" name="applicantEmail" required />
+
+      <label for="resume">Upload Resume:</label>
+      <input type="file" id="resume" name="resume" accept="application/pdf" required />
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
