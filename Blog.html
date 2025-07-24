@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Blog</title>
+  <link rel="stylesheet" href="/Navbar/navbar.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(to right, #ff7a00, #ff944d);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .blog-post {
+      background-color: white;
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .blog-post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .blog-post h2 {
+      color: #ff7a00;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .blog-post p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .footer {
+      background-color: #222;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      margin-top: 40px;
+    }
+
+    .footer strong {
+      color: white;
+    }
+
+    /* Optional: Blog page specific scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f4f4f4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #ff7a00;
+      border-radius: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .blog-post {
+        padding: 20px;
+      }
+
+      .blog-post h2 {
+        font-size: 1.4rem;
+      }
+
+      .blog-post p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="menu" id="menu-btn">☰</div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." id="searchInput" />
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div class="nav-links">
+      <a href="/Navbar/Navbar.html">Home</a>
+      <a href="/Blog.html">Blog</a>
+      <a href="/Contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" id="closeSidebar">×</a>
+
+    <div class="profile">
+      <div class="image-container">
+        <img src="Profile.jpg" alt="Profile Image" id="profileImage" />
+        <div class="overlay">+</div>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+      <h3 id="userName">John Smith</h3>
+      <p class="designation">Software Engineer</p>
+    </div>
+
+    <div class="sidebar-links">
+      <a href="MyProfile.html"><span>👤</span> My Profile</a>
+      <a href="/Jobs.html"><span>💼</span> My Jobs</a>
+      <a href="/saved.html"><span>🔖</span> Saved Jobs</a>
+      <a href="/Preferences.html"><span>⚙️</span> Preferences</a>
+      <a href="/Login.html" class="logout"><span>🚪</span> Log Out</a>
+    </div>
+  </div>
+
+  <header>
+    <h1>📰 Welcome to My Blog</h1>
+    <p style="font-size: 1.1rem; font-weight: 300;">Explore tech tips, career advice & productivity hacks</p>
+  </header>
+
+  <div class="container">
+    <div class="blog-post">
+      <h2>🚀 Getting Started with Web Development</h2>
+      <p>Web development is an exciting field where creativity meets logic. This post introduces basic tools and concepts that help beginners take their first steps into creating websites.</p>
+    </div>
+
+    <div class="blog-post">
+      <h2>🎨 CSS Tips for Better Design</h2>
+      <p>In this post, we explore how small adjustments in CSS—like spacing, shadows, and colors—can create a more professional and visually appealing design.</p>
+    </div>
+
+    <div class="blog-post">
+      <h2>💡 Productivity Hacks for Developers</h2>
+      <p>Being a developer is more than writing code. Discover tools, time management tips, and workflows that help boost efficiency and reduce burnout.</p>
+    </div>
+  </div>
+
+  <!-- <div class="footer">
+    &copy; 2025 <strong>My Blog</strong> — Crafted with ❤ in HTML & CSS
+  </div> -->
+
+  <script>
+  // Load user details from localStorage
+  window.onload = function () {
+    const name = localStorage.getItem('userName');
+    const role = localStorage.getItem('userRole');
+    const profileImage = localStorage.getItem('profileImage');
+
+    if (name) {
+      document.getElementById('userName').innerText = name;
+    }
+    if (role) {
+      document.querySelector('.designation').innerText = role;
+    }
+    if (profileImage) {
+      document.getElementById('profileImage').src = profileImage;
+    }
+  };
+</script>
+
+
+  <script src="/Navbar/navbar.js"></script>
+</body>
+</html>

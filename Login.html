@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('../assets/images/Card.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-container img {
+      width: 350px;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    .login-container h2 {
+      color: #000;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.7);
+      font-size: 16px;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #e02d0b;
+      text-decoration: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #e02d0b;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #e02d0b;
+    }
+
+    .signup-text {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #000;
+    }
+
+    .signup-text a {
+      color: #e02d0b;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .google { background-color: #DB4437; }
+    .google:hover { background-color: #C3362A; }
+
+    .facebook { background-color: #4267B2; }
+    .facebook:hover { background-color: #37529E; }
+
+    .alert {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4caf50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      display: none;
+      z-index: 1000;
+    }
+
+    .alert.error { background: #f44336; }
+  </style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="login-container">
+  <h2>Login</h2>
+
+  <form id="loginForm">
+   <input type="email" id="email" class="input-field" placeholder="Email Address" />
+<input type="password" id="password" class="input-field" placeholder="Password" />
+
+    <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+
+  <div class="signup-text">
+    Don’t have an account ?  <a href="register.html">Sign up</a>
+  </div>
+
+</div>
+
+<div class="alert" id="alert"></div>
+
+<!-- <script>
+  const form = document.getElementById('loginForm');
+  const alertBox = document.getElementById('alert');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Dummy login simulation (replace with actual Firebase logic if needed)
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if(email === "test@example.com" && password === "password123") {
+      showAlert('Login Successful!', false);
+      setTimeout(() => { window.location.href = '/home'; }, 1500);
+    } else {
+      showAlert('Login Failed! Please try again.', true);
+    }
+  });
+
+  function showAlert(message, isError) {
+    alertBox.textContent = message;
+    alertBox.className = 'alert' + (isError ? ' error' : '');
+    alertBox.style.display = 'block';
+    setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+  }
+</script> -->
+<script>
+  const form = document.getElementById('loginForm');
+  const alertBox = document.getElementById('alert');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    clearErrors();
+
+    let valid = true;
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    const emailValue = emailInput.value.trim();
+    const passwordValue = passwordInput.value.trim();
+
+    // Email Validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailValue === '' || !emailPattern.test(emailValue)) {
+      showError(emailInput, "Please enter a email address.");
+      valid = false;
+    }
+
+    // Password Validation (Same pattern as register form)
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*]).{6,}$/;
+    if (!passwordPattern.test(passwordValue)) {
+      showError(passwordInput, "Please enter a Password.");
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Dummy login simulation (replace with actual Firebase logic if needed)
+    if (emailValue === "test@example.com" && passwordValue === "Password@123") {
+      showAlert('Login Successful!', false);
+      setTimeout(() => { window.location.href = '/Navbar'; }, 1500);
+    } else {
+      showAlert('Login Failed! Please try again.', true);
+    }
+  });
+
+  function showError(input, message) {
+    input.style.border = "2px solid red";
+
+    const error = document.createElement('span');
+    error.className = 'error-message';
+    error.style.color = "red";
+    error.style.fontSize = "12px";
+    error.style.display = "block";
+    error.style.marginTop = "-15px";
+    error.style.marginBottom = "10px";
+    error.innerText = message;
+
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
+
+  function clearErrors() {
+    const inputs = document.querySelectorAll('.input-field');
+    inputs.forEach(input => {
+      input.style.border = "none";
+    });
+
+    const errors = document.querySelectorAll('.error-message');
+    errors.forEach(error => error.remove());
+  }
+
+  function showAlert(message, isError) {
+    alertBox.textContent = message;
+    alertBox.className = 'alert' + (isError ? ' error' : '');
+    alertBox.style.display = 'block';
+    setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCmITyKoiKZyk7wYxYlKOx51CP4ueBih5w",
+    authDomain: "job-portal-ef288.firebaseapp.com",
+    projectId: "job-portal-ef288",
+    storageBucket: "job-portal-ef288.appspot.com",
+    messagingSenderId: "646534582274",
+    appId: "1:646534582274:web:0d136ce4804a587f94971b",
+    measurementId: "G-MD1YHSLV88"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+//   const form = document.getElementById('loginForm');
+//   const alertBox = document.getElementById('alert');
+
+  form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      showAlert("Login Successful!", false);
+      setTimeout(() => {
+        window.location.href = "Navbar/Navbar.html"; // Change this to your dashboard/home page
+      }, 1500);
+    } catch (error) {
+      // showAlert(`Error: ${error.message}`, true);
+    }
+  });
+
+  function showAlert(message, isError) {
+    alertBox.innerText = message;
+    alertBox.className = 'alert';
+    if (isError) alertBox.classList.add('error');
+    alertBox.style.display = 'block';
+
+    setTimeout(() => {
+      alertBox.style.display = 'none';
+    }, 3000);
+  }
+</script>
+
+
+
+</body>
+</html>

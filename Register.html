@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('../assets/images/Card.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .register-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .register-form {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .register-form img {
+      width: 350px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    .register-form h2 {
+      color: #000;
+      margin-bottom: 20px;
+      font-family: 'Times New Roman', Times, serif;
+      font-style: italic;
+    }
+
+    .register-form input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+
+    .register-form button {
+      width: 100%;
+      padding: 12px;
+      background: #e02d0b;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .register-form button:hover {
+      background: #e02d0b;
+    }
+
+    .register-form p {
+      color: #000;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .register-form a {
+      color: #e02d0b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay"></div>
+
+  <div class="register-container">
+    <form class="register-form" onsubmit="registerUser(event)">
+      <h2>Register</h2>
+
+  <input type="text" id="fname" name="fname" placeholder="First Name" />
+  <input type="email" id="email" name="email" placeholder="Email Address" />
+  <input type="password" id="password" name="password" placeholder="Password" />
+  <input type="password" id="reenterpassword" name="reenterpassword" placeholder="Re-Enter Password" />
+      
+      <button type="submit">Sign Up</button>
+
+      <p>Already registered ? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+
+
+  <script>
+  function registerUser(event) {
+    event.preventDefault();
+
+    // Clear previous errors
+    clearErrors();
+
+    let valid = true;
+
+    const fname = document.getElementById('fname');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const rePassword = document.getElementById('reenterpassword');
+
+    // First Name Validation
+    const namePattern = /^[A-Za-z\s]+$/;
+    if (fname.value.trim() === '' || !namePattern.test(fname.value)) {
+      showError(fname, "Please enter a valid name (letters only)");
+      valid = false;
+    }
+
+    // Email Validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email.value)) {
+      showError(email, "Please enter a valid email address");
+      valid = false;
+    }
+
+    // Password Validation
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*]).{6,}$/;
+    if (!passwordPattern.test(password.value)) {
+      showError(password, "Password must have:\n- Uppercase & lowercase letters\n- A number\n- A special character (@, #, $, %, &, *)\n- Minimum 6 characters");
+      valid = false;
+    }
+
+    // Re-enter Password
+    if (password.value !== rePassword.value) {
+      showError(rePassword, "Passwords do not match");
+      valid = false;
+    }
+
+    if (valid) {
+      alert("Registration Successful!");
+      // Proceed with Firebase or server logic here
+      // document.querySelector('.register-form').reset();
+    }
+  }
+
+  function showError(input, message) {
+    input.style.border = "2px solid red";
+
+    let error = document.createElement('div');
+    error.style.color = "red";
+    error.style.fontSize = "12px";
+    error.style.marginTop = "-15px";
+    error.style.marginBottom = "15px";
+    error.innerText = message;
+
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
+
+  function clearErrors() {
+    const inputs = document.querySelectorAll('.register-form input');
+    inputs.forEach(input => {
+      input.style.border = "none";
+    });
+
+    const errors = document.querySelectorAll('.register-form div');
+    errors.forEach(div => {
+      if (div.style.color === "red") {
+        div.remove();
+      }
+    });
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCmITyKoiKZyk7wYxYlKOx51CP4ueBih5w",
+    authDomain: "job-portal-ef288.firebaseapp.com",
+    projectId: "job-portal-ef288",
+    storageBucket: "job-portal-ef288.appspot.com",
+    messagingSenderId: "646534582274",
+    appId: "1:646534582274:web:0d136ce4804a587f94971b",
+    measurementId: "G-MD1YHSLV88"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.registerUser = async function(event) {
+    event.preventDefault();
+
+    clearErrors();
+
+    const fname = document.getElementById('fname');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const rePassword = document.getElementById('reenterpassword');
+
+    let valid = true;
+
+    // Name Validation
+    const namePattern = /^[A-Za-z\s]+$/;
+    if (fname.value.trim() === '' || !namePattern.test(fname.value)) {
+      showError(fname, "Please enter a Name");
+      valid = false;
+    }
+
+    // Email Validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email.value)) {
+      showError(email, "Please enter a email address");
+      valid = false;
+    }
+
+    // Password Validation
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*]).{6,}$/;
+    if (!passwordPattern.test(password.value)) {
+      showError(password, "Password must have:\n- Uppercase & lowercase letters\n- A number\n- A special character (@, #, $, %, &, *)\n- Minimum 6 characters");
+      valid = false;
+    }
+
+    // Password Match
+    if (password.value !== rePassword.value) {
+      showError(rePassword, "Passwords do not match");
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
+      const user = userCredential.user;
+
+      // Save first name to localStorage
+      localStorage.setItem('userName', fname.value.trim());
+
+      alert(`Registration Successful! Welcome ${fname.value.trim()}`);
+      document.querySelector('.register-form').reset();
+      window.location.href = "login.html";
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  function showError(input, message) {
+    input.style.border = "2px solid red";
+    let error = document.createElement('div');
+    error.style.color = "red";
+    error.style.fontSize = "12px";
+    error.style.marginTop = "-15px";
+    error.style.marginBottom = "15px";
+    error.innerText = message;
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
+
+  function clearErrors() {
+    const inputs = document.querySelectorAll('.register-form input');
+    inputs.forEach(input => input.style.border = "none");
+
+    const errors = document.querySelectorAll('.register-form div');
+    errors.forEach(div => {
+      if (div.style.color === "red") {
+        div.remove();
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

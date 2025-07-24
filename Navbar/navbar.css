@@ -1,0 +1,289 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #ff7a00;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.menu {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.search-bar {
+  flex: 1;
+  text-align: center;
+}
+
+.search-bar input {
+  width: 50%;
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+}
+
+.search-bar button {
+  padding: 6px 10px;
+  border: none;
+  background-color: #555;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 10px;
+  transition: background 0.3s;
+}
+
+.nav-links a:hover {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+/* Sidebar */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: #fe9901;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+}
+
+/* Profile section */
+.profile {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.image-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.image-container img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid red;
+}
+
+.image-container .overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-size: 18px;
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.image-container input[type="file"] {
+  display: none;
+}
+
+.profile h3 {
+  color: white;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.designation {
+  color: #bbb;
+  font-size: 14px;
+}
+
+/* Sidebar links */
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-links a {
+  padding: 12px 10px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  transition: 0.3s;
+}
+
+.sidebar-links a span {
+  margin-right: 10px;
+}
+
+.sidebar-links a:hover {
+  background-color: #34495E;
+  border-radius: 5px;
+}
+
+.sidebar-links .logout {
+  margin-top: 140px;
+}
+
+.closebtn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  text-decoration: none;
+  color: white;
+}
+
+#home {
+  background-image: url('/assets/images/background.avif');
+   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay background */
+.overlay-bg {
+  position: fixed;
+  display: none;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+
+.result-sidebar {
+  position: fixed;
+  right: -100%;
+  top: 0;
+  height: 100%;
+  width: 400px;
+  background: #E4BC81;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  padding: 20px;
+  overflow-y: auto;
+  transition: right 0.4s ease;
+  z-index: 1001;
+}
+
+.result-sidebar.active {
+  right: 0;
+}
+
+.close-result {
+  font-size: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+.apply-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #ff7a00;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.apply-btn:hover {
+  background-color: #e06600;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  margin: 10% auto;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.modal-content button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+

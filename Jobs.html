@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Listings</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="Navbar/navbar.css" rel="stylesheet">
+
+  <style>
+
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: navy;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    .job-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .job-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .job-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .company-name {
+      font-size: 1.2rem;
+      color: #ff7a00;
+      font-weight: bold;
+    }
+
+    .material-icons.save-icon {
+      cursor: pointer;
+      color: #ccc;
+      transition: color 0.3s;
+    }
+
+    .material-icons.save-icon.saved {
+      color: #ff7a00;
+    }
+
+    .job-role {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .job-location {
+      color: #777;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .job-details {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .apply-btn {
+      padding: 10px 20px;
+      background: #ff7a00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .apply-btn:hover {
+      background: #e86b00;
+    }
+
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  margin: 10% auto;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.modal-content button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+
+<body>
+     <nav class="navbar">
+    <div class="menu" id="menu-btn">☰</div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." id="searchInput" />
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div class="nav-links">
+      <a href="/Navbar/Navbar.html">Home</a>
+      <a href="/Blog.html">Blog</a>
+      <a href="/Contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" id="closeSidebar">×</a>
+
+    <div class="profile">
+      <div class="image-container">
+        <img src="Profile.jpg" alt="Profile Image" id="profileImage" />
+        <div class="overlay">+</div>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+      <h3 id="userName">John Smith</h3>
+      <p class="designation">Software Engineer</p>
+    </div>
+
+    <div class="sidebar-links">
+  <a href="MyProfile.html"><span>👤</span> My Profile</a>
+  <a href="/Jobs.html"><span>💼</span> My Jobs</a>
+  <a href="/saved.html"><span>🔖</span> Saved Jobs</a>
+  <a href="/Preferences.html"><span>⚙️</span> Preferences</a>
+  <a href="/Login.html" class="logout"><span>🚪</span> Log Out</a>
+</div>
+  </div>
+
+  <h1>Available Jobs</h1>
+
+  <div class="job-container" id="jobContainer">
+    <!-- Job Cards will be inserted here -->
+  </div>
+
+  <script>
+    const jobs = [
+      {
+        company: "Google",
+        role: "Frontend Developer",
+        location: "Bangalore, India",
+        requirement: "3+ years of experience in React.js, HTML, CSS",
+        eligibility: "B.Tech / M.Tech in Computer Science",
+        about: "Work on Google Search UI and enhance user experience."
+      },
+      {
+        company: "Microsoft",
+        role: "Backend Developer",
+        location: "Hyderabad, India",
+        requirement: "Proficient in Node.js, SQL, Azure services",
+        eligibility: "Bachelor's Degree in CS or related field",
+        about: "Build scalable backend services for Microsoft Teams."
+      },
+      {
+        company: "Amazon",
+        role: "Data Analyst",
+        location: "Chennai, India",
+        requirement: "Strong in SQL, Python, Tableau",
+        eligibility: "Graduate with data analysis background",
+        about: "Analyze customer purchase patterns to improve sales."
+      },
+      {
+        company: "Infosys",
+        role: "Full Stack Developer",
+        location: "Pune, India",
+        requirement: "Java, Spring Boot, React.js experience",
+        eligibility: "B.E / B.Tech in any stream",
+        about: "Develop enterprise-level web apps for clients."
+      },
+      {
+        company: "TCS",
+        role: "Software Tester",
+        location: "Mumbai, India",
+        requirement: "Knowledge of Selenium, API testing",
+        eligibility: "Any Graduate with testing certification",
+        about: "Ensure software quality by automated testing."
+      },
+      {
+        company: "Accenture",
+        role: "Cloud Engineer",
+        location: "Remote",
+        requirement: "AWS/GCP experience, CI/CD pipelines",
+        eligibility: "Cloud certification preferred",
+        about: "Manage cloud infrastructure and deployments."
+      },
+      {
+        company: "Zoho",
+        role: "UI/UX Designer",
+        location: "Chennai, India",
+        requirement: "Figma, Adobe XD, User Research",
+        eligibility: "Any Graduate with design skills",
+        about: "Design user-friendly interfaces for SaaS products."
+      },
+      {
+        company: "HCL",
+        role: "Network Engineer",
+        location: "Noida, India",
+        requirement: "CCNA/CCNP certification",
+        eligibility: "Diploma or Degree in Networking",
+        about: "Manage and troubleshoot network issues."
+      },
+      {
+        company: "Wipro",
+        role: "HR Manager",
+        location: "Bangalore, India",
+        requirement: "5+ years of HR experience",
+        eligibility: "MBA in HR Management",
+        about: "Lead HR operations and recruitment processes."
+      },
+      {
+        company: "Capgemini",
+        role: "DevOps Engineer",
+        location: "Kolkata, India",
+        requirement: "Docker, Kubernetes, Jenkins knowledge",
+        eligibility: "B.Tech in CS or related field",
+        about: "Automate deployments and manage CI/CD pipelines."
+      },
+      {
+        company: "IBM",
+        role: "AI Engineer",
+        location: "Pune, India",
+        requirement: "Machine Learning, Python, TensorFlow",
+        eligibility: "Masters in AI/ML preferred",
+        about: "Work on AI-based solutions and research projects."
+      },
+      {
+        company: "Flipkart",
+        role: "Product Manager",
+        location: "Bangalore, India",
+        requirement: "E-commerce experience, Agile methodology",
+        eligibility: "MBA with product management knowledge",
+        about: "Manage product lifecycle from concept to delivery."
+      },
+      {
+        company: "Paytm",
+        role: "Security Analyst",
+        location: "Noida, India",
+        requirement: "Cybersecurity knowledge, ethical hacking",
+        eligibility: "CEH certification preferred",
+        about: "Monitor and secure company digital assets."
+      },
+      {
+        company: "Freshworks",
+        role: "Customer Support Executive",
+        location: "Chennai, India",
+        requirement: "Good communication, CRM knowledge",
+        eligibility: "Any Graduate",
+        about: "Handle customer queries and provide solutions."
+      },
+      {
+        company: "Deloitte",
+        role: "Business Analyst",
+        location: "Hyderabad, India",
+        requirement: "Analytical thinking, MS Excel, SQL",
+        eligibility: "MBA or relevant degree",
+        about: "Analyze business data to improve processes."
+      }
+    ];
+
+    const container = document.getElementById("jobContainer");
+
+    jobs.forEach((job, index) => {
+      const card = document.createElement("div");
+      card.className = "job-card";
+
+      card.innerHTML = `
+        <div class="job-header">
+          <div class="company-name">${job.company}</div>
+          <span class="material-icons save-icon" onclick="toggleSave(this)">bookmark_border</span>
+        </div>
+        <div class="job-role">${job.role}</div>
+        <div class="job-location">${job.location}</div>
+        <div class="job-details"><strong>Requirement:</strong> ${job.requirement}</div>
+        <div class="job-details"><strong>Eligibility:</strong> ${job.eligibility}</div>
+        <div class="job-details"><strong>About:</strong> ${job.about}</div>
+        <button class="apply-btn" onclick="applyNow('${job.company}', '${job.role}')">Apply Now</button>
+      `;
+
+      container.appendChild(card);
+    });
+
+   function toggleSave(icon) {
+  const card = icon.closest(".job-card");
+  const company = card.querySelector(".company-name").textContent;
+  const role = card.querySelector(".job-role").textContent;
+  const location = card.querySelector(".job-location").textContent;
+  const requirement = card.querySelectorAll(".job-details")[0].textContent.replace("Requirement: ", "");
+  const eligibility = card.querySelectorAll(".job-details")[1].textContent.replace("Eligibility: ", "");
+  const about = card.querySelectorAll(".job-details")[2].textContent.replace("About: ", "");
+
+  icon.classList.toggle("saved");
+  icon.textContent = icon.classList.contains("saved") ? "bookmark" : "bookmark_border";
+
+  let savedJobs = JSON.parse(localStorage.getItem("savedJobs")) || [];
+
+  if (icon.classList.contains("saved")) {
+    // Save full job info
+    savedJobs.push({
+      company,
+      role,
+      location,
+      requirements: requirement,
+      eligibility,
+      about
+    });
+  } else {
+    // Remove job
+    savedJobs = savedJobs.filter(job => !(job.company === company && job.role === role));
+  }
+
+  localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+}
+
+
+  </script>
+
+  <script>
+function applyNow(company, role) {
+  document.getElementById("modalCompany").textContent = company;
+  document.getElementById("modalRole").textContent = role;
+  document.getElementById("applyModal").style.display = "block";
+}
+
+// Close modal
+// document.getElementById("closeModal").onclick = () => {
+//   document.getElementById("applyModal").style.display = "none";
+// };
+
+// Close when clicking outside modal
+window.onclick = function(event) {
+  const modal = document.getElementById("applyModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+// Example form submission
+document.getElementById("applyForm").onsubmit = function(e) {
+  e.preventDefault();
+  alert("Application submitted successfully!");
+  document.getElementById("applyModal").style.display = "none";
+  this.reset();
+};
+</script>
+
+<script>
+  // Ensure DOM is fully loaded
+  window.onload = function () {
+    const modal = document.getElementById("applyModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const form = document.getElementById("applyForm");
+
+    // Close modal via X button
+    closeModalBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Close modal on outside click
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    // Form validation and submission
+    form.onsubmit = function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("applicantName").value.trim();
+      const email = document.getElementById("applicantEmail").value.trim();
+      const fileInput = document.getElementById("resume");
+      const file = fileInput.files[0];
+
+      if (!name || !email || !file) {
+        alert("Please fill in all fields and upload a resume.");
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      // Validate file type
+      if (file.type !== "application/pdf") {
+        alert("Please upload a PDF file.");
+        return;
+      }
+
+      // Success
+      alert("Application submitted successfully!");
+      modal.style.display = "none";
+      form.reset();
+    };
+  };
+</script>
+
+<script>
+  // Load user details from localStorage
+  window.onload = function () {
+    const name = localStorage.getItem('userName');
+    const role = localStorage.getItem('userRole');
+    const profileImage = localStorage.getItem('profileImage');
+
+    if (name) {
+      document.getElementById('userName').innerText = name;
+    }
+    if (role) {
+      document.querySelector('.designation').innerText = role;
+    }
+    if (profileImage) {
+      document.getElementById('profileImage').src = profileImage;
+    }
+  };
+</script>
+
+
+
+
+  <script src="Navbar/navbar.js"></script>
+<!-- Apply Now Modal -->
+<div id="applyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Apply for <span id="modalRole"></span> at <span id="modalCompany"></span></h2>
+    <form id="applyForm">
+      <label for="applicantName">Your Name:</label>
+      <input type="text" id="applicantName" name="applicantName" required />
+
+      <label for="applicantEmail">Your Email:</label>
+      <input type="email" id="applicantEmail" name="applicantEmail" required />
+
+      <label for="resume">Upload Resume:</label>
+      <input type="file" id="resume" name="resume" accept="application/pdf" required />
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

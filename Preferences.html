@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Preferences</title>
+  <link rel="stylesheet" href="navbar.css" />
+  <link href="Navbar/navbar.css" rel="stylesheet">
+  <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+      text-align: center;
+      color: navy;
+      font-style: italic;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .filter-container {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .filter-container h2 {
+      margin-bottom: 15px;
+    }
+
+    .filter-container label {
+      margin-right: 10px;
+    }
+
+    .filter-container input, .filter-container select {
+      margin-right: 15px;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .jobs-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .job-card {
+  background: white;
+  padding: 20px;
+  width: calc(20% - 20px); /* 5 cards per row with spacing */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+
+    .job-card h3 {
+      margin: 0;
+      color: #ff7a00;
+    }
+
+    .job-card p {
+      margin: 8px 0;
+    }
+
+    .job-card button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: #ff7a00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  margin: 10% auto;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.modal-content button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <div id="navbar-container"></div>
+
+      <nav class="navbar">
+    <div class="menu" id="menu-btn">☰</div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." id="searchInput" />
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div class="nav-links">
+      <a href="/Navbar/Navbar.html">Home</a>
+      <a href="/Blog.html">Blog</a>
+      <a href="/Contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" id="closeSidebar">×</a>
+
+    <div class="profile">
+      <div class="image-container">
+        <img src="Profile.jpg" alt="Profile Image" id="profileImage" />
+        <div class="overlay">+</div>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+      <h3 id="userName">John Smith</h3>
+      <p class="designation">Software Engineer</p>
+    </div>
+
+    <div class="sidebar-links">
+  <a href="/MyProfile.html"><span>👤</span> My Profile</a>
+  <a href="/Jobs.html"><span>💼</span> My Jobs</a>
+  <a href="/saved.html"><span>🔖</span> Saved Jobs</a>
+  <a href="/Preferences.html"><span>⚙️</span> Preferences</a>
+  <a href="/Login.html" class="logout"><span>🚪</span> Log Out</a>
+</div>
+  </div>
+
+  <!-- Navbar here (reuse your navbar code) -->
+
+  <div class="filter-container">
+    <h1>Filter Jobs</h1>
+
+    <label>Location:</label>
+    <input type="text" id="locationFilter" placeholder="e.g. Chennai">
+
+    <label>Role:</label>
+    <input type="text" id="roleFilter" placeholder="e.g. Developer">
+
+    <label>Experience:</label>
+    <select id="experienceFilter">
+      <option value="">Any</option>
+      <option value="Fresher">Fresher</option>
+      <option value="Mid-Level">Mid-Level</option>
+      <option value="Senior">Senior</option>
+    </select>
+
+    <label>Job Type:</label>
+    <select id="jobTypeFilter">
+      <option value="">Any</option>
+      <option value="Full-Time">Full-Time</option>
+      <option value="Part-Time">Part-Time</option>
+      <option value="Remote">Remote</option>
+      <option value="Internship">Internship</option>
+    </select>
+
+    <label>Min Salary:</label>
+    <input type="number" id="salaryFilter" placeholder="e.g. 500000" style="width:100px;">
+  </div>
+
+  <div class="jobs-container" id="jobsList">
+    <!-- Filtered jobs will appear here -->
+  </div>
+
+  <script>
+    const jobs = [
+      {company: "Google", role: "Frontend Developer", location: "Bangalore", experience: "Mid-Level", jobType: "Full-Time", salary: 1200000},
+      {company: "Amazon", role: "Backend Developer", location: "Chennai", experience: "Senior", jobType: "Full-Time", salary: 1500000},
+      {company: "StartupX", role: "UI/UX Designer", location: "Remote", experience: "Fresher", jobType: "Remote", salary: 600000},
+      {company: "TCS", role: "Java Developer", location: "Pune", experience: "Mid-Level", jobType: "Full-Time", salary: 900000},
+      {company: "Infosys", role: "Data Scientist", location: "Hyderabad", experience: "Senior", jobType: "Full-Time", salary: 1400000},
+      {company: "Zoho", role: "Support Engineer", location: "Chennai", experience: "Fresher", jobType: "Full-Time", salary: 500000},
+      {company: "Freshworks", role: "Product Manager", location: "Chennai", experience: "Senior", jobType: "Full-Time", salary: 1600000},
+      {company: "Wipro", role: "DevOps Engineer", location: "Bangalore", experience: "Mid-Level", jobType: "Full-Time", salary: 1100000},
+      {company: "Microsoft", role: "Software Engineer", location: "Hyderabad", experience: "Mid-Level", jobType: "Full-Time", salary: 1300000},
+      {company: "Capgemini", role: "QA Tester", location: "Pune", experience: "Fresher", jobType: "Full-Time", salary: 400000},
+      {company: "Accenture", role: "Business Analyst", location: "Mumbai", experience: "Senior", jobType: "Full-Time", salary: 1500000},
+      {company: "Flipkart", role: "Data Engineer", location: "Bangalore", experience: "Mid-Level", jobType: "Full-Time", salary: 1250000},
+      {company: "Cognizant", role: "React Developer", location: "Chennai", experience: "Mid-Level", jobType: "Full-Time", salary: 950000},
+      {company: "Tech Mahindra", role: "Network Engineer", location: "Pune", experience: "Fresher", jobType: "Full-Time", salary: 500000},
+      {company: "HCL", role: "Security Analyst", location: "Noida", experience: "Senior", jobType: "Full-Time", salary: 1350000}
+    ];
+
+    const jobsList = document.getElementById('jobsList');
+
+    function renderJobs(filteredJobs) {
+      jobsList.innerHTML = "";
+      if (filteredJobs.length === 0) {
+        jobsList.innerHTML = "<p>No jobs match your preferences.</p>";
+        return;
+      }
+
+      filteredJobs.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        card.innerHTML = `
+          <h3>${job.role}</h3>
+          <p><strong>Company:</strong> ${job.company}</p>
+          <p><strong>Location:</strong> ${job.location}</p>
+          <p><strong>Experience:</strong> ${job.experience}</p>
+          <p><strong>Type:</strong> ${job.jobType}</p>
+          <p><strong>Salary:</strong> ₹${job.salary}</p>
+          <button onclick="applyNow('${job.company}', '${job.role}')">Apply Now</button>
+
+        `;
+        jobsList.appendChild(card);
+      });
+    }
+
+    function filterJobs() {
+      const location = document.getElementById('locationFilter').value.toLowerCase();
+      const role = document.getElementById('roleFilter').value.toLowerCase();
+      const experience = document.getElementById('experienceFilter').value;
+      const jobType = document.getElementById('jobTypeFilter').value;
+      const salary = document.getElementById('salaryFilter').value;
+
+      const filtered = jobs.filter(job => {
+        return (
+          (location === "" || job.location.toLowerCase().includes(location)) &&
+          (role === "" || job.role.toLowerCase().includes(role)) &&
+          (experience === "" || job.experience === experience) &&
+          (jobType === "" || job.jobType === jobType) &&
+          (salary === "" || job.salary >= parseInt(salary))
+        );
+      });
+
+      renderJobs(filtered);
+    }
+
+    // Add event listeners
+    document.querySelectorAll('.filter-container input, .filter-container select').forEach(input => {
+      input.addEventListener('input', filterJobs);
+    });
+
+    // Initial load
+    renderJobs(jobs);
+  </script>
+
+  <script>
+  function applyNow(company, role) {
+    document.getElementById("modalCompany").textContent = company;
+    document.getElementById("modalRole").textContent = role;
+    document.getElementById("applyModal").style.display = "block";
+  }
+
+  // Wait for DOM content before assigning modal handlers
+  window.onload = function () {
+    const modal = document.getElementById("applyModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const form = document.getElementById("applyForm");
+
+    closeModalBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    form.onsubmit = function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("applicantName").value.trim();
+      const email = document.getElementById("applicantEmail").value.trim();
+      const fileInput = document.getElementById("resume");
+      const file = fileInput.files[0];
+
+      if (!name || !email || !file) {
+        alert("Please fill in all fields and upload a resume.");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      if (file.type !== "application/pdf") {
+        alert("Only PDF files are accepted for resumes.");
+        return;
+      }
+
+      alert("Application submitted successfully!");
+      modal.style.display = "none";
+      form.reset();
+    };
+  };
+</script>
+
+<script>
+  // Load user details from localStorage
+  window.onload = function () {
+    const name = localStorage.getItem('userName');
+    const role = localStorage.getItem('userRole');
+    const profileImage = localStorage.getItem('profileImage');
+
+    if (name) {
+      document.getElementById('userName').innerText = name;
+    }
+    if (role) {
+      document.querySelector('.designation').innerText = role;
+    }
+    if (profileImage) {
+      document.getElementById('profileImage').src = profileImage;
+    }
+  };
+</script>
+
+
+
+  <script src="/Navbar/navbar.js"></script>
+
+  <!-- Apply Now Modal -->
+<div id="applyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Apply for <span id="modalRole"></span> at <span id="modalCompany"></span></h2>
+    <form id="applyForm">
+      <label for="applicantName">Your Name:</label>
+      <input type="text" id="applicantName" name="applicantName" required />
+
+      <label for="applicantEmail">Your Email:</label>
+      <input type="email" id="applicantEmail" name="applicantEmail" required />
+
+      <label for="resume">Upload Resume:</label>
+      <input type="file" id="resume" name="resume" accept="application/pdf" required />
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+
+</body>
+</html>
